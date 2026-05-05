@@ -90,9 +90,9 @@ with tab1:
             
             st.info(f"💡 **AI 종합 투자 의견**: {opinion}")
 
-            st.subheader("📊 최근 120일 차트 흐름")
-            df_chart = df.tail(120).copy()
-            df_analyzed = chart_analyzer.df.tail(120) 
+            st.subheader("📊 최근 1년(250 거래일) 차트 흐름")
+            df_chart = df.tail(250).copy()
+            df_analyzed = chart_analyzer.df.tail(250) 
             
             fig = go.Figure()
             fig.add_trace(go.Candlestick(

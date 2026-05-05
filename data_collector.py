@@ -42,8 +42,8 @@ class StockDataFetcher:
         if not end_date:
             end_date = datetime.today().strftime('%Y-%m-%d')
         if not start_date:
-            # 기본적으로 최근 1년치 데이터 수집
-            start_date = (datetime.today() - timedelta(days=365)).strftime('%Y-%m-%d')
+            # 기본적으로 최근 2년치 데이터 수집 (장기 이평선 계산 및 1년치 차트 출력을 위해)
+            start_date = (datetime.today() - timedelta(days=730)).strftime('%Y-%m-%d')
             
         print(f"[{symbol_or_name}({symbol})] 데이터를 {start_date}부터 {end_date}까지 불러옵니다...")
         df = fdr.DataReader(symbol, start_date, end_date)
