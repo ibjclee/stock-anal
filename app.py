@@ -70,6 +70,32 @@ with tab1:
             
             st.header(f"[{krx_code}] {krx_name} 분석 결과")
             
+            # OHLC 데이터 추출 및 계산
+            today_data = df.iloc[-1]
+            prev_data = df.iloc[-2] if len(df) > 1 else None
+            
+            close_price = int(today_data['Close'])
+            open_price = int(today_data['Open'])
+            high_price = int(today_data['High'])
+            low_price = int(today_data['Low'])
+            
+            if prev_data is not None:
+                prev_close = int(prev_data['Close'])
+                price_diff = close_price - prev_close
+                price_diff_percent = (price_diff / prev_close) * 100
+            else:
+                price_diff = 0
+                price_diff_percent = 0.0
+
+            # OHLC 및 변동 표시
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("현재가(종가)", f"{close_price:,}원", f"{price_diff:,}원 ({price_diff_percent:.2f}%)")
+            c2.metric("시가", f"{open_price:,}원")
+            c3.metric("고가", f"{high_price:,}원")
+            c4.metric("저가", f"{low_price:,}원")
+            
+            st.divider()
+            
             if market_res['score'] < 0:
                 opinion = "보수적 접근 (관망 또는 비중 축소)"
             elif total_score >= 30:

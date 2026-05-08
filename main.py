@@ -46,6 +46,26 @@ def main():
     print("                      분석 결과 요약")
     print("="*60)
     
+    today_data = df.iloc[-1]
+    prev_data = df.iloc[-2] if len(df) > 1 else None
+    
+    close_price = int(today_data['Close'])
+    open_price = int(today_data['Open'])
+    high_price = int(today_data['High'])
+    low_price = int(today_data['Low'])
+    
+    if prev_data is not None:
+        prev_close = int(prev_data['Close'])
+        price_diff = close_price - prev_close
+        price_diff_percent = (price_diff / prev_close) * 100
+    else:
+        price_diff = 0
+        price_diff_percent = 0.0
+        
+    sign = "+" if price_diff > 0 else ""
+    print(f"\n▶ [오늘의 가격] 종가: {close_price:,}원 (시가: {open_price:,} / 고가: {high_price:,} / 저가: {low_price:,})")
+    print(f"   -> 전일대비: {sign}{price_diff:,}원 ({sign}{price_diff_percent:.2f}%)")
+    
     print(f"\n▶ [재료] 분석 점수: {cat_res['score']}점")
     for reason in cat_res['reasons']:
         print(f"  - {reason}")
