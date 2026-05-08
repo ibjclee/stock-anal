@@ -40,6 +40,11 @@ with tab1:
         st.query_params.clear()
         with st.spinner("데이터를 수집하고 분석 중입니다... 잠시만 기다려주세요."):
             fetcher = StockDataFetcher()
+            
+            if fetcher.krx_list is None:
+                st.error(f"주식 서버(KRX) 통신 오류가 발생했습니다. (사유: {getattr(fetcher, 'krx_error', '알 수 없음')})\n\n잠시 후 다시 시도하거나, 종목명 대신 '종목코드(예: 005930)'를 직접 입력해보세요.")
+                st.stop()
+                
             krx_code = fetcher.get_code_by_name(symbol_input)
             
             if not krx_code:

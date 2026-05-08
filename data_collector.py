@@ -7,8 +7,13 @@ class StockDataFetcher:
         # 종목명 검색을 위해 KRX 전체 종목 목록을 가져옵니다.
         try:
             self.krx_list = fdr.StockListing('KRX')
-        except Exception:
-            self.krx_list = None
+        except Exception as e:
+            try:
+                # Fallback: try KRX-DESC which uses a different endpoint
+                self.krx_list = fdr.StockListing('KRX-DESC')
+            except Exception as e2:
+                self.krx_list = None
+                self.krx_error = f"KRX: {e}, KRX-DESC: {e2}"
             
     def get_code_by_name(self, name_or_code):
         """이름을 입력하면 코드로, 코드를 입력하면 그대로 반환합니다."""
