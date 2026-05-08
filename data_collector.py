@@ -1,6 +1,7 @@
 import FinanceDataReader as fdr
 import pandas as pd
 from datetime import datetime, timedelta
+import os
 
 class StockDataFetcher:
     def __init__(self):
@@ -12,8 +13,13 @@ class StockDataFetcher:
                 # Fallback: try KRX-DESC which uses a different endpoint
                 self.krx_list = fdr.StockListing('KRX-DESC')
             except Exception as e2:
-                self.krx_list = None
-                self.krx_error = f"KRX: {e}, KRX-DESC: {e2}"
+                # Fallback 2: Local CSV
+                csv_path = os.path.join(os.path.dirname(__file__), 'krx_list.csv')
+                if os.path.exists(csv_path):
+                    self.krx_list = pd.read_csv(csv_path, dtype={'Code': str})
+                else:
+                    self.krx_list = None
+                    self.krx_error = f"KRX: {e}, KRX-DESC: {e2}"
             
     def get_code_by_name(self, name_or_code):
         """이름을 입력하면 코드로, 코드를 입력하면 그대로 반환합니다."""
